@@ -38,10 +38,17 @@ public class NoteServiceImpl implements NoteService {
     public Note update(Long id, Note note) {
         Note noteToUpdate = noteRepository.findById(id).orElse(null);
         if (noteToUpdate != null) {
-            noteToUpdate.setTitle(note.getTitle());
-            noteToUpdate.setContent(note.getContent());
+            if (note.getTitle() != null) noteToUpdate.setTitle(note.getTitle());
+
+            if (note.getContent() != null)  noteToUpdate.setContent(note.getContent());
+
+            if (note.getAuthor() != null) noteToUpdate.setAuthor(note.getAuthor());
+
             return noteRepository.save(noteToUpdate);
         }
         return null;
     }
+
+
+
 }

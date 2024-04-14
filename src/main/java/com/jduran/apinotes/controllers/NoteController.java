@@ -1,6 +1,7 @@
 package com.jduran.apinotes.controllers;
 
 import com.jduran.apinotes.dto.CreateNoteDto;
+import com.jduran.apinotes.dto.UpdateNoteDto;
 import com.jduran.apinotes.entities.Note;
 import com.jduran.apinotes.services.NoteService;
 import jakarta.validation.Valid;
@@ -26,6 +27,19 @@ public class NoteController {
         return noteService.getNotes();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getNoteById(@PathVariable Long id) {
+        Note note = noteService.getNoteById(id);
+
+        if (note == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Nota no encontrada");
+        }
+
+        return ResponseEntity.ok(note);
+    }
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid CreateNoteDto noteDto) {
         try {
@@ -40,8 +54,29 @@ public class NoteController {
                     .ok()
                     .body("Nota guardada correctamente");
         } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la nota");
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al guardar la nota");
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UpdateNoteDto noteDto) {
+        Note note = new Note();
+
+        note.setTitle(noteDto.getTitle());
+        note.setContent(noteDto.getContent());
+        note.setAuthor(noteDto.getAuthor());
+
+        Note updatedNote = noteService.update(id, note);
+
+        if (updatedNote == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Nota no encontrada");
+        }
+
+        return ResponseEntity.ok(updatedNote);
     }
 
 }

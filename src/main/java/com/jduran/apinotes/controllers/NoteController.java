@@ -79,4 +79,10 @@ public class NoteController {
         return ResponseEntity.ok(updatedNote);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        noteService.delete(id);
+        return ResponseEntity.ok("Nota eliminada correctamente");
+    }
+
 }

@@ -7,6 +7,8 @@ import com.jduran.apinotes.services.NoteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,9 +25,17 @@ public class NoteController {
     private NoteService noteService;
 
     @GetMapping
-    public List<Note> getNotes() {
-        return noteService.getNotes();
+    public Page<Note> getNotes(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "asc") String sortOrder
+    ) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        return noteService.getNotes(page,size, sort);
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getNoteById(@PathVariable Long id) {

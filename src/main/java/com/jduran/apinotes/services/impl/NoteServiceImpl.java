@@ -4,6 +4,10 @@ import com.jduran.apinotes.entities.Note;
 import com.jduran.apinotes.repository.NoteRepository;
 import com.jduran.apinotes.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +19,10 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
 
     @Override
-    public List<Note> getNotes() {
-        return noteRepository.findAll();
+    public Page<Note> getNotes(Integer page, Integer size, Sort sort) {
+        System.out.println("page: " + page + " size: " + size);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return noteRepository.findAll(pageable);
     }
 
     @Override

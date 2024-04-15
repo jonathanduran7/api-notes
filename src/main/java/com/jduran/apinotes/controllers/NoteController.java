@@ -4,6 +4,9 @@ import com.jduran.apinotes.dto.CreateNoteDto;
 import com.jduran.apinotes.dto.UpdateNoteDto;
 import com.jduran.apinotes.entities.Note;
 import com.jduran.apinotes.services.NoteService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -38,6 +41,20 @@ public class NoteController {
 
 
     @GetMapping("/{id}")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Note.class)
+            ))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Not Found",
+            content = @Content(
+                    mediaType = "text/plain",
+                    schema = @Schema(implementation = String.class)
+            ))
     public ResponseEntity<?> getNoteById(@PathVariable Long id) {
         Note note = noteService.getNoteById(id);
 
@@ -50,6 +67,13 @@ public class NoteController {
         return ResponseEntity.ok(note);
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = String.class)
+            ))
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid CreateNoteDto noteDto) {
         try {
@@ -70,6 +94,13 @@ public class NoteController {
         }
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = String.class)
+            ))
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UpdateNoteDto noteDto) {
         Note note = new Note();
@@ -89,6 +120,13 @@ public class NoteController {
         return ResponseEntity.ok(updatedNote);
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = String.class)
+            ))
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         noteService.delete(id);

@@ -1,5 +1,6 @@
 package com.jduran.apinotes.services.impl;
 
+import com.jduran.apinotes.dto.CreateNoteDto;
 import com.jduran.apinotes.entities.Note;
 import com.jduran.apinotes.repository.NoteRepository;
 import com.jduran.apinotes.services.NoteService;
@@ -9,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -31,8 +30,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note save(Note note) {
-        return noteRepository.save(note);
+    public void save(CreateNoteDto note) {
+        Note noteDto = new Note();
+        noteDto.setTitle(note.getTitle());
+        noteDto.setContent(note.getContent());
+        noteDto.setAuthor(note.getAuthor());
+        noteRepository.save(noteDto);
     }
 
     @Override

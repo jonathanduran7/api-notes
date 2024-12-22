@@ -74,16 +74,11 @@ public class NoteController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = String.class)
             ))
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid CreateNoteDto noteDto) {
         try {
-            Note note = new Note();
-            note.setTitle(noteDto.getTitle());
-            note.setContent(noteDto.getContent());
-            note.setAuthor(noteDto.getAuthor());
-
-            noteService.save(note);
-
+            noteService.save(noteDto);
             return ResponseEntity
                     .ok()
                     .body("Nota guardada correctamente");
